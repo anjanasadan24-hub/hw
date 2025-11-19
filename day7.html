@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Event Reminder Tool</title>
+</head>
+<body>
+
+<h2>Event Reminder Tool</h2>
+
+<label>Select a past date:</label>
+<input type="date" id="userDate">
+<button onclick="processDate()">Submit</button>
+
+<h3>Result:</h3>
+<p id="output"></p>
+
+<script>
+function processDate() {
+    // 1. Read user input
+    const input = document.getElementById("userDate").value;
+    if (!input) {
+        document.getElementById("output").innerHTML = "Please select a date.";
+        return;
+    }
+
+    // Convert input to JavaScript Date object
+    const userDate = new Date(input);
+    
+    // 2. Extract year, month name, day
+    const year = userDate.getFullYear();
+
+    // Month names array
+    const monthNames = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+    ];
+    const monthName = monthNames[userDate.getMonth()];
+
+    const day = userDate.getDate();
+
+    // 3. Calculate how many full years have passed
+    const today = new Date();
+    let yearsPassed = today.getFullYear() - userDate.getFullYear();
+
+    // If the current date is before the user's date (month/day), subtract one year
+    const hasNotHadAnniversary =
+        (today.getMonth() < userDate.getMonth()) ||
+        (today.getMonth() === userDate.getMonth() && today.getDate() < userDate.getDate());
+
+    if (hasNotHadAnniversary) {
+        yearsPassed--;
+    }
+
+    // 4. Custom message: more than or less than 1 year?
+    let message = "";
+    if (yearsPassed >= 1) {
+        message = "It has been more than a year since that date.";
+    } else {
+        message = "It has been less than a year since that date.";
+    }
+
+    // 5. Display everything
+    document.getElementById("output").innerHTML =
+        `Selected date: <b>${day} ${monthName} ${year}</b><br>` +
+        `Full years passed: <b>${yearsPassed}</b><br>` +
+        message;
+}
+</script>
+
+</body>
+</html>
